@@ -6,6 +6,6 @@ class CaptchaSolver2(input: String) {
     println(s"list   : $numbers")
     println(s"rotated: $rotated")*/
 
-    def sum: Int = numbers.zip(rotated).flatMap(pair => if(pair._1 == pair._2) Some(pair._1) else None).sum
+    def sum: Int = numbers.zip(rotated).filter(pair => pair._1 == pair._2).map(_._1).sum
 
 }
