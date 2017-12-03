@@ -21,7 +21,7 @@ class ExecuteDay1 extends FunSuite {
 
     test("print the result") {
         val result = new CaptchaSolver(input).sum1
-        println("First Captcha: " + result)
+        println("First Solution for day one: " + result)
         assertResult(1203)(result)
     }
 
@@ -47,7 +47,7 @@ class ExecuteDay1 extends FunSuite {
 
     test("print the result - 2") {
         val result = new CaptchaSolver(input).sum2
-        println("Second Captcha: " + result)
+        println("Second Solution for day one: " + result)
         assertResult(1146)(result)
     }
 }
