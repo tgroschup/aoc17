@@ -1,6 +1,6 @@
 import org.scalatest.FunSuite
 
-class ExecuteDay3 extends FunSuite{
+class Day3 extends FunSuite{
     val input = 347991
 
     test("origin") {
@@ -43,7 +43,7 @@ class ExecuteDay3 extends FunSuite{
     }
 
     test(input.toString) {
-        println("First solution for day three is: " + Coordinate.fromSpiralCoordinate(input).mannheimDistanceFromOrigin)
+        assertResult(480)(Coordinate.fromSpiralCoordinate(input).mannheimDistanceFromOrigin)
     }
 
     test("get value at origin") {
@@ -65,8 +65,6 @@ class ExecuteDay3 extends FunSuite{
 
     test(s"get first bigger value than $input") {
         Coordinate.fromSpiralCoordinate(input) // Build coordinate map
-        val gettingValue: Int = Coordinate.m.values.map(_.getOrElse(0)).toList.sorted.find(_ > input).get
-
-        println(s"Second Result of day three is $gettingValue")
+        assertResult(349975)(Coordinate.m.values.map(_.getOrElse(0)).toList.sorted.find(_ > input).get)
     }
 }

@@ -1,6 +1,6 @@
 import org.scalatest.FunSuite
 
-class ExecuteDay1 extends FunSuite {
+class Day1 extends FunSuite {
     private val input = Main.getStringFromResource("day1")
 
     test("1122") {
