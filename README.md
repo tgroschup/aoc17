@@ -1,4 +1,5 @@
 Solutions to [advent of code 2017](https://adventofcode.com/) in scala.
+Terribly overengineered.
 
 #### Prerequisites:
 
