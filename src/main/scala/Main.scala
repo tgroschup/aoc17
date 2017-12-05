@@ -8,7 +8,8 @@ object Main extends App {
                                             , 6 -> "six", 7 -> "seven", 8 -> "eight", 9 -> "nine", 10 -> "ten"
                                             , 11 -> "eleven", 12 -> "twelve").getOrElse(i, i.toString)
 
-    private def dayTemplate(day: Int, solution1: String => Any, solution2: String => Any): Unit = {
+    private def dayTemplate(day: Int, solution1: String => Any = _ => "TODO"
+                                    , solution2: String => Any = _ => "TODO"): Unit = {
         println(s"\nDay ${number2Word(day)}:")
         val input: String = Try(getStringFromResource(s"day$day")) match {
             case Success(s) => s
@@ -32,4 +33,6 @@ object Main extends App {
                 , _ => Coordinate.m.values.map(_.getOrElse(0)).toList.sorted.find(_ > inputDay3).get)
 
     dayTemplate(4, new Passphrase(_).countValid, new Passphrase(_).countValidWithAnagrams)
+
+    dayTemplate(5, new JumpList(_).countJumps)
 }
