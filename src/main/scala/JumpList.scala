@@ -5,12 +5,11 @@ class JumpList(jumpList: String) {
         if(i >= jumps.length || i < 0) jumpCounter
         else {
             val newIndex = i + jumps(i)
-            jumps.update(i, modifyIndex(jumps(i)))
+            jumps(i) = modifyIndex(jumps(i))
             jump(jumps, newIndex, modifyIndex, jumpCounter +1)
         }
 
-
-    private def jumpIterative(jumps: Array[Int], modifyIndex: Int => Int): Int = {
+    /*private def jumpIterative(jumps: Array[Int], modifyIndex: Int => Int): Int = {
         var jumpCounter = 0
         var nextIndex = 0
 
@@ -22,10 +21,10 @@ class JumpList(jumpList: String) {
         }
 
         jumpCounter
-    }
+    }*/
 
     def countJumps: Int = jump(jumps, 0, i => i + 1)
-    def countJumpsIterative: Int = jumpIterative(jumps, i => i + 1)
+    //def countJumpsIterative: Int = jumpIterative(jumps, i => i + 1)
     def countJumpsInAnAbsurdWay: Int = jump(jumps, 0, i => if(i >= 3) i-1 else i + 1)
-    def countJumpsInAnAbsurdWayIterative: Int = jumpIterative(jumps, i => if(i >= 3) i-1 else i + 1)
+    //def countJumpsInAnAbsurdWayIterative: Int = jumpIterative(jumps, i => if(i >= 3) i-1 else i + 1)
 }
