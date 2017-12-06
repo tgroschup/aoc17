@@ -35,4 +35,6 @@ object Main extends App {
     dayTemplate(4, new Passphrase(_).countValid, new Passphrase(_).countValidWithAnagrams)
 
     dayTemplate(5, new JumpList(_).countJumps, new JumpList(_).countJumpsInAnAbsurdWay)
+
+    dayTemplate(6, new Reallocator(_).countRedistributions, new Reallocator(_).getLoopSize)
 }
