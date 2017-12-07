@@ -37,4 +37,6 @@ object Main extends App {
     dayTemplate(5, new JumpList(_).countJumps, new JumpList(_).countJumpsInAnAbsurdWay)
 
     dayTemplate(6, new Reallocator(_).countRedistributions, new Reallocator(_).getLoopSize)
+
+    dayTemplate(7, new ProgramTower(_).root.name, new ProgramTower(_).findUnbalancedDisk)
 }
