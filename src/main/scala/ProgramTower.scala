@@ -7,9 +7,11 @@ object ProgramInTower {
     def apply(name: String): ProgramInTower = programs(name)
     def apply(name: String, weight: Int, children: List[ProgramInTower]): ProgramInTower =
         programs.getOrElseUpdate(name, new ProgramInTower(name, weight, children))
+
+    def clear: Unit = programs.clear
 }
 case class ProgramInTower(name: String, weight: Int, children: List[ProgramInTower]) {
-    override def toString = name + "(" + weight.toString + ")"
+    override def toString: String = name + "(" + weight.toString + ")"
 }
 
 object ProgramTowerParser extends RegexParsers {
@@ -52,7 +54,10 @@ object ProgramTowerParser extends RegexParsers {
         ProgramInTower(done.last)
     }
 
-    def apply(input: String): ProgramInTower = { //should return root of tree
+    def apply(input: String): ProgramInTower = {
+        ProgramInTower.clear
+        weights.clear()
+        children.clear()
         parse(programTower, input) match {
             case Success(_, _) => buildTree
             case Failure(msg, _)  => throw new Exception("Parsing failed here:\n" + msg)
@@ -71,32 +76,21 @@ class ProgramTower(input: String) {
     def findUnbalancedDisk: Int = {
         def calculateWeigh(node: ProgramInTower, level: Int = 0): Int = {
             val subweight: Int = if(node.children.nonEmpty) {
-                val s0 = calculateWeigh(node.children(0), level + 1)
-                val s1 = calculateWeigh(node.children(1), level + 1)
-                val s2 = calculateWeigh(node.children(2), level + 1)
+                val childrenWithSubweights = node.children.map(c => c -> calculateWeigh(c, level + 1)).toMap
+                val subweights = childrenWithSubweights.values
+                val countedSubweights = subweights.groupBy(identity).mapValues(_.size)
 
-                val subweight = s0 + s1 + s2
+                if(countedSubweights.size == 2) {
+                    val oddOne = countedSubweights.minBy(_._2)._1
+                    val others = countedSubweights.maxBy(_._2)._1
 
-                println(s"node: $node")
-                if(node.children.nonEmpty) {
-                    println(s"children ($subweight): ${node.children(0)}($s0), ${node.children(1)}($s1) ${node.children(2)}($s2)")
+                    val oddChild: ProgramInTower = childrenWithSubweights.find(_._2 == oddOne).get._1
+                    val diff = math.abs(oddOne - others)
+
+                    throw DiskUnbalanced(oddChild, oddChild.weight - diff)
                 }
 
-                if (s0 == s1 && s2 != s0) {
-                    val diff = math.abs(s0-s2)
-                    val child = node.children(2)
-                    throw DiskUnbalanced(child, child.weight - diff)
-                } else if (s0 == s2 && s0 != s1 ) {
-                    val diff = math.abs(s0-s1)
-                    val child = node.children(1)
-                    throw DiskUnbalanced(child, child.weight - diff)
-                } else if (s1 == s2 && s1 != s0) {
-                    val diff = math.abs(s0-s1)
-                    val child = node.children(0)
-                    throw DiskUnbalanced(child, child.weight - diff)
-                }
-
-                subweight
+                subweights.sum
             } else {
                 0
             }
@@ -105,7 +99,7 @@ class ProgramTower(input: String) {
 
         try calculateWeigh(root)
         catch {
-            case DiskUnbalanced(node, weight) => weight
+            case DiskUnbalanced(_, correctedWeight) => correctedWeight
         }
     }
 }

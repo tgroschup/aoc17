@@ -1,7 +1,8 @@
 import org.scalatest.FunSuite
 
 class Day7 extends FunSuite {
-    private val exampleIntput =
+    private val realInput = Main.getStringFromResource("day7")
+    private val exampleInput =
         """
           |pbga (66)
           |xhth (57)
@@ -19,10 +20,18 @@ class Day7 extends FunSuite {
           |""".stripMargin
 
     test("example input") {
-        assertResult("tknk")(new ProgramTower(exampleIntput))
+        assertResult("tknk")(new ProgramTower(exampleInput).getRootNodeName)
+    }
+
+    test("real imput") {
+        assertResult("hlhomy")(new ProgramTower(realInput).getRootNodeName)
     }
 
     test("example find unbalanced program") {
-        assertResult(60)(new ProgramTower(exampleIntput).findUnbalancedDisk)
+        assertResult(60)(new ProgramTower(exampleInput).findUnbalancedDisk)
+    }
+
+    test("real find unbalanced program") {
+        assertResult(1505)(new ProgramTower(realInput).findUnbalancedDisk)
     }
 }
