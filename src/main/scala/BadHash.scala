@@ -26,7 +26,10 @@ class BadHash(val input: String) {
 
     def transform(size: Int): Int = {
         val lengths: List[Int] = input.split(",").map(java.lang.Integer.parseInt).toList
-        val t = doRound((0 until size).toList, Queue(lengths: _ *), 0, 0).list
+
+        val round = doRound((0 until size).toList, Queue(lengths: _ *), 0, 0)
+
+        val t = round.list
 
         t.head * t(1)
     }
@@ -34,18 +37,16 @@ class BadHash(val input: String) {
     def getHash: String = {
         val asciiBytes: List[Int] = input.map(_.toInt).toList
 
-        var lastRound: Round = Round((0 until 255).toList, 0, 0)
+        var lastRound: Round = Round((0 until 256).toList, 0, 0)
 
-        for(i <- 0 to 64) {
+        for(i <- 0 until 64) {
             lastRound = doRound(lastRound.list, Queue(asciiBytes:::suffix:_*), lastRound.position, lastRound.skip)
         }
 
         val sparseHash = lastRound.list
-        val denseHash = sparseHash.grouped(16).map(block => block.foldRight(block.head){
-            case (entry, xord) => entry ^ xord
-        })
 
-        denseHash.foldRight(""){case (number, string) => number.toHexString + string}
+        val denseHash = sparseHash.grouped(16).map(_.reduce(_ ^ _)).toList
 
+        denseHash.map(number => f"$number%02x").mkString
     }
 }
