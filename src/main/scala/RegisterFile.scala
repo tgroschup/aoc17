@@ -1,6 +1,6 @@
 import scala.collection.mutable
-import scala.util.matching.Regex
 import scala.util.parsing.combinator.RegexParsers
+import scala.language.implicitConversions
 
 class RegisterFile {
     private val registers = mutable.Map[String, Int]()
@@ -26,39 +26,35 @@ class RegisterFile {
     override def toString: String = registers.toString
 }
 
-
 class RegisterInstructionParser(input: String) extends RegexParsers {
     private val regfile = new RegisterFile
 
     case class RegisterAdd(name: String, value: Int)
 
-    case class Comp(name: String, value: Int, op: (Int, Int) => Boolean) {
-        def eval: Boolean = {
-            val regEntry = regfile(name)
-            op(regEntry, value)
-        }
+    case class Guard(name: String, value: Int, op: (Int, Int) => Boolean)
+    object Guard {
+        implicit def toBoolean(c: Guard): Boolean = c.op(regfile(c.name), c.value)
     }
 
     def registerName: Parser[String] = "[a-z]+".r
     def value: Parser[Int] = "-?[0-9]+".r  ^^ {java.lang.Integer.parseInt}
-
     def decrement: Parser[RegisterAdd] = registerName ~ ("dec" ~> value) ^^ {case name ~ value => RegisterAdd(name, -1 * value)}
     def increment: Parser[RegisterAdd] = registerName ~ ("inc" ~> value) ^^ {case name ~ value => RegisterAdd(name, value)}
 
-    def condition: Parser[Comp] = "if" ~> registerName ~ ("==" | ">=" | "<=" | ">" | "<" | "!=") ~ value ^^ {
+    def guard: Parser[Guard] = "if" ~> registerName ~ ("==" | ">=" | "<=" | ">" | "<" | "!=") ~ value ^^ {
         case name ~ op ~ value => op match {
-            case "==" => Comp(name, value, _ == _)
-            case ">" => Comp(name, value, _ > _)
-            case "<" => Comp(name, value, _ < _)
-            case ">=" => Comp(name, value, _ >= _)
-            case "<=" => Comp(name, value, _ <= _)
-            case "!=" => Comp(name, value, _ != _)
+            case "==" => Guard(name, value, _ == _)
+            case ">" => Guard(name, value, _ > _)
+            case "<" => Guard(name, value, _ < _)
+            case ">=" => Guard(name, value, _ >= _)
+            case "<=" => Guard(name, value, _ <= _)
+            case "!=" => Guard(name, value, _ != _)
         }
     }
 
-    def registerManipulationStatement: Parser[Unit] = (increment | decrement) ~ condition ^^ {
-        case RegisterAdd(name, value) ~ condition =>
-            if(condition.eval) regfile.add(name, value)
+    def registerManipulationStatement: Parser[Unit] = (increment | decrement) ~ guard ^^ {
+        case RegisterAdd(name, value) ~ guard =>
+            if(guard) regfile.add(name, value)
     }
 
     def registerManipulations: Parser[List[Unit]] = registerManipulationStatement.+
