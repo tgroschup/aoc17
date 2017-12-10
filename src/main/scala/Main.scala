@@ -41,4 +41,6 @@ object Main extends App {
     dayTemplate(7, new ProgramTower(_).root.name, new ProgramTower(_).findUnbalancedDisk)
 
     dayTemplate(8, new RegisterInstructionParser(_).execute.max, new RegisterInstructionParser(_).execute.allTimeMax)
+
+    dayTemplate(9, new CharacterStream(_).score, new CharacterStream(_).garbageCount)
 }
