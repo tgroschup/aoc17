@@ -39,7 +39,7 @@ class BadHash(val input: String) {
 
         var lastRound: Round = Round((0 until 256).toList, 0, 0)
 
-        for(i <- 0 until 64) {
+        for(_ <- 0 until 64) {
             lastRound = doRound(lastRound.list, Queue(asciiBytes:::suffix:_*), lastRound.position, lastRound.skip)
         }
 
