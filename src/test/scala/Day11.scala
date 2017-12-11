@@ -1,6 +1,7 @@
 import org.scalatest.FunSuite
 
 class Day11 extends FunSuite{
+    private val realInput = Main.getStringFromResource("day11")
 
     test("3x north") {
         assertResult(3)(new HexagonInfinity("n,n,n").distanceAfterWalk)
@@ -22,4 +23,15 @@ class Day11 extends FunSuite{
         assertResult(3)(new HexagonInfinity("se,sw,se,sw,sw").distanceAfterWalk)
     }
 
+    test("distance in real input") (
+        assertResult(720)(new HexagonInfinity(realInput).distanceAfterWalk)
+    )
+
+    test("furthes distance - there and back again") {
+        assertResult(2)(new HexagonInfinity("ne,ne,sw,sw").furthestDistance)
+    }
+
+    test("furthes distance in real input") (
+        assertResult(1485)(new HexagonInfinity(realInput).furthestDistance)
+    )
 }

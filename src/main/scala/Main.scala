@@ -45,4 +45,6 @@ object Main extends App {
     dayTemplate(9, new CharacterStream(_).score, new CharacterStream(_).garbageCount)
 
     dayTemplate(10, new BadHash(_).transform(256), new BadHash(_).getHash)
+
+    dayTemplate(11, new HexagonInfinity(_).distanceAfterWalk, new HexagonInfinity(_).furthestDistance)
 }

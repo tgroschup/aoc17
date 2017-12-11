@@ -34,7 +34,11 @@ case class AxialCoord(q: Int, r: Int) {
 object Hexagon {
     private val hexagons = mutable.Map[AxialCoord, Hexagon]()
 
+    def clear(): Unit = hexagons.clear
+
     def apply(coord: AxialCoord): Hexagon = hexagons.getOrElseUpdate(coord, new Hexagon(coord))
+
+    def all: Map[AxialCoord, Hexagon] = hexagons.toMap
 }
 case class Hexagon(coord: AxialCoord) {
     private val neighbours = mutable.Map[HexDirection, Hexagon]()
@@ -47,13 +51,18 @@ case class Hexagon(coord: AxialCoord) {
 
 class HexagonInfinity(input: String) {
     private val directionList: Seq[HexDirection] = input.split(",").map(HexDirection(_))
+    private val origin = Hexagon(AxialCoord(0,0))
+
+    Hexagon.clear()
 
     private def walkPath(path: Seq[HexDirection], current: Hexagon): Hexagon =
         if(path.nonEmpty) walkPath(path.tail, current.goTo(path.head))
         else current
 
-    def distanceAfterWalk: Int = {
-        val origin = Hexagon(AxialCoord(0,0))
-        origin.distance(walkPath(directionList, origin))
+    def distanceAfterWalk: Int =  origin.distance(walkPath(directionList, origin))
+
+    def furthestDistance: Int = {
+        distanceAfterWalk
+        Hexagon.all.keys.map(_.distance(AxialCoord(0,0))).max
     }
 }
