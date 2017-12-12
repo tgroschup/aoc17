@@ -42,14 +42,14 @@ class RegisterInstructionParser(input: String) extends RegexParsers {
     def increment: Parser[RegisterAdd] = registerName ~ ("inc" ~> value) ^^ {case name ~ value => RegisterAdd(name, value)}
 
     def guard: Parser[Guard] = "if" ~> registerName ~ ("==" | ">=" | "<=" | ">" | "<" | "!=") ~ value ^^ {
-        case name ~ op ~ value => op match {
-            case "==" => Guard(name, value, _ == _)
-            case ">" => Guard(name, value, _ > _)
-            case "<" => Guard(name, value, _ < _)
-            case ">=" => Guard(name, value, _ >= _)
-            case "<=" => Guard(name, value, _ <= _)
-            case "!=" => Guard(name, value, _ != _)
-        }
+        case name ~ op ~ value => Guard(name, value, op match {
+                case "==" =>  _ == _
+                case ">" =>  _ > _
+                case "<" =>  _ < _
+                case ">=" =>  _ >= _
+                case "<=" => _ <= _
+                case "!=" =>  _ != _
+            })
     }
 
     def registerManipulationStatement: Parser[Unit] = (increment | decrement) ~ guard ^^ {
