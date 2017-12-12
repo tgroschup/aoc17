@@ -47,4 +47,6 @@ object Main extends App {
     dayTemplate(10, new BadHash(_).transform(256), new BadHash(_).getHash)
 
     dayTemplate(11, new HexagonInfinity(_).distanceAfterWalk, new HexagonInfinity(_).furthestDistance)
+
+    dayTemplate(12, new PipeGraph(_).enumerateBFS(0).size, new PipeGraph(_).countConnectedComponents)
 }
