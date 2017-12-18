@@ -22,10 +22,10 @@ class Day13 extends FunSuite {
     }
 
     test("min delay on test data") {
-        assertResult(10)(new FirewallWalker(testInput).getMinDelayForZeroPenalty)
+        assertResult(10)(new FirewallWalker(testInput).minDelayUndetected)
     }
 
     test("min delay on real data") {
-        assertResult(10)(new FirewallWalker(realInput).getMinDelayForZeroPenalty)
+        assertResult(3865118)(new FirewallWalker(realInput).minDelayUndetected)
     }
 }

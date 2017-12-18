@@ -19,6 +19,9 @@ case class FirewallLayer(level: Int, range: Int) {
             throw new Exception(s"illegal layer configuration: $currentScannerPosition and goingDown $goingDown")
         }
     }
+
+    //reuse class without full simulation
+    def detected(delay: Int): Boolean = (level + delay) % (2 * range - 2) == 0
 }
 
 class Paket {
@@ -33,7 +36,9 @@ class Paket {
 }
 
 class FirewallWalker(input: String) {
-    val firewall: Seq[FirewallLayer] =  makeFirewall(input)
+    private val firewall: Seq[FirewallLayer] =  makeFirewall(input)
+
+    private val activeLayers = makeActiveFirewall(input)
 
     private def makeFirewall(in: String): Seq[FirewallLayer] = {
         val tempWall: mutable.MutableList[FirewallLayer] = mutable.MutableList()
@@ -56,6 +61,26 @@ class FirewallWalker(input: String) {
             }
 
 
+            tempWall += FirewallLayer(level,java.lang.Integer.parseInt(levelAndRange(1)))
+        }
+
+        tempWall
+    }
+
+    private def makeActiveFirewall(in: String): Seq[FirewallLayer] = {
+        val tempWall: mutable.MutableList[FirewallLayer] = mutable.MutableList()
+
+        val lines = in.split("\n")
+
+        for(line <- lines) {
+            val levelAndRange = line.split(": ")
+
+            if(levelAndRange.length != 2) {
+                throw new Exception("Pasring error in line " + lines.indexOf(line)
+                    +"\nline lookes like:\n" + line)
+            }
+
+            val level = java.lang.Integer.parseInt(levelAndRange(0))
             tempWall += FirewallLayer(level,java.lang.Integer.parseInt(levelAndRange(1)))
         }
 
@@ -111,4 +136,8 @@ class FirewallWalker(input: String) {
         }
         delay - 1
     }
+
+    private def notDetected(delay: Int) : Boolean = activeLayers.forall(!_.detected(delay))
+
+    def minDelayUndetected: Int = Stream.from(0).find(notDetected).get
 }

@@ -49,4 +49,6 @@ object Main extends App {
     dayTemplate(11, new HexagonInfinity(_).distanceAfterWalk, new HexagonInfinity(_).furthestDistance)
 
     dayTemplate(12, new PipeGraph(_).enumerateBFS(0).size, new PipeGraph(_).countConnectedComponents)
+
+    dayTemplate(13, new FirewallWalker(_).walkThrough, new FirewallWalker(_).minDelayUndetected)
 }
