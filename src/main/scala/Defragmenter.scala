@@ -24,7 +24,7 @@ class Defragmenter(val key: String) {
             case 'f' => "1111"
         }.flatten.map(_ == '1')
 
-    private val rows: IndexedSeq[IndexedSeq[Boolean]] = (0 to gridSize).map(row)
+    private val rows: IndexedSeq[IndexedSeq[Boolean]] = (0 until gridSize).map(row)
 
     def printHashDot: String = {
         val header: String = "visualizing an " + rows.size + "x" + rows(0).size + " grid"
@@ -55,7 +55,8 @@ class Defragmenter(val key: String) {
             }
         }
 
-        val coords = (0 until gridSize).zip(0 until rowSize).map(c => Coord(c._1, c._2))
+
+        val coords = for {x <- 0 until gridSize; y <- 0 until rowSize } yield Coord(x, y)
 
         for(c <- coords if !visited(c.toIndex) && rows(c.x)(c.y)) {
             visited(c.toIndex) = true

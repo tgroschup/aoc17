@@ -15,6 +15,7 @@ class Day14 extends FunSuite{
     }
 
     test("real input connected components") {
-        assertResult(8214)(new Defragmenter(realInput).countConnectedComponents)
+        val d = new Defragmenter(realInput)
+        assertResult(1093)(d.countConnectedComponents)
     }
 }
