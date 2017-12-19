@@ -56,5 +56,6 @@ object Main extends App {
 
     dayTemplate(15, _ => Judge(4000000, new GeneratorA(65), new GeneratorB(8921))
                     , _ => Judge(500000, new PickyGenA(65), new PickyGenB(8921)))
-    dayTemplate(16, new ProgramDance(_).dance.mkString)
+
+    dayTemplate(16, new ProgramDance(_).dance().mkString, new ProgramDance(_).dance(1000000000).mkString)
 }

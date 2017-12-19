@@ -57,32 +57,38 @@ object MoveInstructor extends RegexParsers {
 class ProgramDance(moveslist: String, toCharacter: Char = 'p') {
     private val startingPostitions = ('a' to toCharacter).toList
 
-    private val moves = MoveInstructor(moveslist)
+    private val allMoves = MoveInstructor(moveslist)
 
-    private def doMoves(moves: Seq[DanceMove], positions: List[Char]): List[Char] = {
+    private def doMoves(moves: Seq[DanceMove], positions: List[Char], doneMoves: Int = 0): List[Char] = {
         if(moves.isEmpty) positions
         else {
             /*val instruction = moves.head
             val tempList = instruction(positions)
             println(s"from $positions with $instruction to $tempList")*/
-            doMoves(moves.tail, moves.head(positions))
+            doMoves(moves.tail, moves.head(positions), doneMoves + 1)
         }
     }
 
-    def dance(): List[Char] = doMoves(moves, startingPostitions)
+    private def findLoop(last: List[Char], counter: Int = 1): Int = {
+        val next = doMoves(allMoves, last)
+        if(next == startingPostitions) counter
+        else findLoop(next, counter + 1)
+    }
+
+    val loopSize: Int = findLoop(startingPostitions)
+
+    def dance(): List[Char] = doMoves(allMoves, startingPostitions)
 
     def dance(times: Int): List[Char] = {
-        //val longMoves = Stream.tabulate(times*moves.size)(n => moves(n%moves.size))
+        val todoMoves = times % loopSize
 
-        var lastPos = startingPostitions
-        for(i <- 0 until times) {
-            val next = doMoves(moves, lastPos)
-            if(lastPos == next) {
-                println(s"found repetition after $i dances")
-            }
-            lastPos = next
+        println(s"found loop after $loopSize complete dances: only doing $todoMoves dances")
+
+        var lastMove = startingPostitions
+        for(_ <- 0 until todoMoves) {
+           lastMove = doMoves(allMoves, lastMove)
         }
 
-        lastPos
+        lastMove
     }
 }

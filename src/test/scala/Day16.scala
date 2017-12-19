@@ -18,6 +18,6 @@ class Day16 extends FunSuite {
     }
 
     test("real dance multiple times") {
-        assertResult("ceadb")(new ProgramDance(input).dance(1000000000).mkString)
+        assertResult("gnflbkojhicpmead")(new ProgramDance(input).dance(1000000000).mkString)
     }
 }
