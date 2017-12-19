@@ -51,4 +51,10 @@ object Main extends App {
     dayTemplate(12, new PipeGraph(_).enumerateBFS(0).size, new PipeGraph(_).countConnectedComponents)
 
     dayTemplate(13, new FirewallWalker(_).walkThrough, new FirewallWalker(_).minDelayUndetected)
+
+    dayTemplate(14, new Defragmenter(_).count, new Defragmenter(_).countConnectedComponents)
+
+    dayTemplate(15, _ => Judge(4000000, new GeneratorA(65), new GeneratorB(8921))
+                    , _ => Judge(500000, new PickyGenA(65), new PickyGenB(8921)))
+    dayTemplate(16, new ProgramDance(_).dance.mkString)
 }
