@@ -60,4 +60,6 @@ object Main extends App {
     dayTemplate(16, new ProgramDance(_).dance().mkString, new ProgramDance(_).dance(1000000000).mkString)
 
     dayTemplate(17, _ => new Stormlock(304).runBuffer(2017),_ => new Stormlock(304).secondValueAfter(50000000))
+
+    dayTemplate(18, new SoundGenerator(_).getFirstRecovered)
 }

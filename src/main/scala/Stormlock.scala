@@ -6,7 +6,7 @@ class Stormlock(val steps: Int) {
     private val cBuffer =  mutable.ListBuffer(0)
 
     @tailrec
-    private def update(value: Int, times: Int, position: Int = 0): Int = if(times > 0){
+    private def update(value: Int, times: Int, position: Int = 0): Int = if(times > 0) {
         val i = (position + steps)%cBuffer.size + 1
 
         //println(s"insert $value at position $i into $cBuffer")
