@@ -58,4 +58,6 @@ object Main extends App {
                     , _ => Judge(500000, new PickyGenA(65), new PickyGenB(8921)))
 
     dayTemplate(16, new ProgramDance(_).dance().mkString, new ProgramDance(_).dance(1000000000).mkString)
+
+    dayTemplate(17, _ => new Stormlock(304).runBuffer(2017),_ => new Stormlock(304).secondValueAfter(50000000))
 }
